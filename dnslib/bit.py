@@ -8,7 +8,7 @@ from __future__ import print_function
 FILTER: bytearray = bytearray([(i < 32 or i > 127) and 46 or i for i in range(256)])
 
 
-def hexdump(src: int, length: int = 16, prefix: str = '') -> str:
+def hexdump(src: bytes, length: int = 16, prefix: str = '') -> str:
     """
     Print hexdump of string
 
