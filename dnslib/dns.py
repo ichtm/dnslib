@@ -74,8 +74,9 @@ class DNSRecord(object):
         >>> d.add_answer(RR("abc.com",QTYPE.CNAME,ttl=60,rdata=CNAME("ns.abc.com")))
         >>> d.add_auth(RR("abc.com",QTYPE.SOA,ttl=60,rdata=SOA("ns.abc.com","admin.abc.com",(20140101,3600,3600,3600,3600))))
         >>> d.add_ar(RR("ns.abc.com",ttl=60,rdata=A("1.2.3.4")))
+        >>> d.header.id = 0     # ignore changing id
         >>> print(d)
-        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
         ;; flags: rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
         ;; QUESTION SECTION:
         ;abc.com.                       IN      A
@@ -123,15 +124,17 @@ class DNSRecord(object):
             Shortcut to create question
 
             >>> q = DNSRecord.question("www.google.com")
+            >>> q.header.id = 0     # ignore changing id
             >>> print(q)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;www.google.com.                IN      A
 
             >>> q = DNSRecord.question("www.google.com","NS")
+            >>> q.header.id = 0     # ignore changing id
             >>> print(q)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;www.google.com.                IN      NS
@@ -164,8 +167,9 @@ class DNSRecord(object):
             >>> q = DNSRecord.question("abc.com")
             >>> a = q.reply()
             >>> a.add_answer(RR("abc.com",QTYPE.A,rdata=A("1.2.3.4"),ttl=60))
+            >>> a.header.id = 0     # ignore changing id
             >>> print(a)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;abc.com.                       IN      A
@@ -182,8 +186,9 @@ class DNSRecord(object):
             Create reply with response data in zone-file format
             >>> q = DNSRecord.question("abc.com")
             >>> a = q.replyZone("abc.com 60 A 1.2.3.4")
+            >>> a.header.id = 0     # ignore changing id
             >>> print(a)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;abc.com.                       IN      A
@@ -203,8 +208,9 @@ class DNSRecord(object):
             >>> q = DNSRecord()
             >>> q.add_question(DNSQuestion("abc.com"),
             ...                DNSQuestion("abc.com",QTYPE.MX))
+            >>> q.header.id = 0     # ignore changing id
             >>> print(q)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: rd; QUERY: 2, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;abc.com.                       IN      A
@@ -220,8 +226,9 @@ class DNSRecord(object):
             >>> q = DNSRecord.question("abc.com")
             >>> a = q.reply()
             >>> a.add_answer(*RR.fromZone("abc.com A 1.2.3.4"))
+            >>> a.header.id = 0     # ignore changing id
             >>> print(a)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;abc.com.                       IN      A
@@ -239,8 +246,9 @@ class DNSRecord(object):
             >>> a = q.reply()
             >>> a.add_answer(*RR.fromZone("abc.com 60 A 1.2.3.4"))
             >>> a.add_auth(*RR.fromZone("abc.com 3600 NS nsa.abc.com"))
+            >>> a.header.id = 0     # ignore changing id
             >>> print(a)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
             ;; QUESTION SECTION:
             ;abc.com.                       IN      A
@@ -260,8 +268,9 @@ class DNSRecord(object):
             >>> a = q.reply()
             >>> a.add_answer(*RR.fromZone("abc.com 60 CNAME x.abc.com"))
             >>> a.add_ar(*RR.fromZone("x.abc.com 3600 A 1.2.3.4"))
+            >>> a.header.id = 0     # ignore changing id
             >>> print(a)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
             ;; QUESTION SECTION:
             ;abc.com.                       IN      A
@@ -337,8 +346,9 @@ class DNSRecord(object):
             >>> len(a.pack())
             829
             >>> t = a.truncate()
+            >>> t.header.id = 0     # ignore changing id
             >>> print(t)
-            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+            ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
             ;; flags: qr aa tc rd ra; QUERY: 0, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0
 
         """
@@ -742,7 +752,7 @@ class EDNSOption(object):
         >>> EDNSOption(1,None)
         Traceback (most recent call last):
         ...
-        ValueError: Attribute 'data' must be instance of ...
+        ValueError: Attribute 'data' must be instance of (<class 'bytes'>, <class 'bytearray'>) [<class 'NoneType'>]
 
     """
 
@@ -944,8 +954,9 @@ class EDNS0(RR):
         ; EDNS: code: 1; data: 61626364
         >>> r = DNSRecord.question("abc.com").replyZone("abc.com A 1.2.3.4")
         >>> r.add_ar(opt)
+        >>> r.header.id = 0     # ignore changing id
         >>> print(r)
-        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
         ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
         ;; QUESTION SECTION:
         ;abc.com.                       IN      A
@@ -1068,8 +1079,9 @@ class TXT(RD):
         >>> a = DNSRecord()
         >>> a.add_answer(*RR.fromZone('example.com 60 IN TXT "txtvers=1"'))
         >>> a.add_answer(*RR.fromZone('example.com 120 IN TXT "txtvers=1" "swver=2.3"'))
+        >>> a.header.id = 0     # ignore changing id
         >>> print(a)
-        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
         ;; flags: rd; QUERY: 0, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 0
         ;; ANSWER SECTION:
         example.com.            60      IN      TXT     "txtvers=1"
@@ -1688,8 +1700,9 @@ class CAA(RD):
         0 issue \"letsencrypt.org\"
         >>> a = DNSRecord()
         >>> a.add_answer(*RR.fromZone('example.com 60 IN CAA 0 issue "letsencrypt.org"'))
+        >>> a.header.id = 0     # ignore changing id
         >>> print(a)
-        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ...
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 0
         ;; flags: rd; QUERY: 0, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
         ;; ANSWER SECTION:
         example.com.            60      IN      CAA     0 issue "letsencrypt.org"
