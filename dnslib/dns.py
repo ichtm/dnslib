@@ -11,10 +11,7 @@ import base64, binascii, calendar, collections, copy, os.path, random, socket, \
 
 from itertools import chain
 
-try:
-    from itertools import zip_longest
-except ImportError:
-    from itertools import izip_longest as zip_longest
+from itertools import zip_longest
 
 from dnslib.bit import get_bits, set_bits
 from dnslib.bimap import Bimap, BimapError
@@ -58,12 +55,12 @@ OPCODE = Bimap('OPCODE', {0: 'QUERY', 1: 'IQUERY', 2: 'STATUS', 4: 'NOTIFY', 5: 
                DNSError)
 
 
-def label(label, origin=None):
-    if label.endswith("."):
-        return DNSLabel(label)
+def label(label_text, origin=None):
+    if label_text.endswith("."):
+        return DNSLabel(label_text)
     else:
         return (origin if isinstance(origin, DNSLabel)
-                else DNSLabel(origin)).add(label)
+                else DNSLabel(origin)).add(label_text)
 
 
 class DNSRecord(object):
