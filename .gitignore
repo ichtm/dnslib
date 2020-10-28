@@ -1,3 +1,6 @@
+.idea
+.gitignore
+.github
 *.pyc
 build
 dist
