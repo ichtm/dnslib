@@ -5,9 +5,10 @@
 """
 from __future__ import print_function
 
-FILTER = bytearray([ (i < 32 or i > 127) and 46 or i for i in range(256) ])
+FILTER: bytearray = bytearray([(i < 32 or i > 127) and 46 or i for i in range(256)])
 
-def hexdump(src, length=16, prefix=''):
+
+def hexdump(src: int, length: int = 16, prefix: str = '') -> str:
     """
     Print hexdump of string
 
@@ -37,7 +38,8 @@ def hexdump(src, length=16, prefix=''):
         n += length
     return "\n".join(result)
 
-def get_bits(data,offset,bits=1):
+
+def get_bits(data: int, offset: int, bits: int = 1) -> int:
     """
         Get specified bits from integer
 
@@ -47,10 +49,11 @@ def get_bits(data,offset,bits=1):
         '0b1100'
 
     """
-    mask = ((1 << bits) - 1) << offset
+    mask: int = ((1 << bits) - 1) << offset
     return (data & mask) >> offset
 
-def set_bits(data,value,offset,bits=1):
+
+def set_bits(data: int, value: int, offset: int, bits: int = 1) -> int:
     """
         Set specified bits in integer
 
@@ -59,12 +62,13 @@ def set_bits(data,value,offset,bits=1):
         >>> bin(set_bits(0,0b1010,3,4))
         '0b1010000'
     """
-    mask = ((1 << bits) - 1) << offset
-    clear = 0xffff ^ mask
+    mask: int = ((1 << bits) - 1) << offset
+    clear: int = 0xffff ^ mask
     data = (data & clear) | ((value << offset) & mask)
     return data
 
-def binary(n,count=16,reverse=False):
+
+def binary(n: int, count: int = 16, reverse: bool = False) -> str:
     """
         Display n in binary (only difference from built-in `bin` is
         that this function returns a fixed width string and can
@@ -78,10 +82,11 @@ def binary(n,count=16,reverse=False):
         '1010000101011000'
 
     """
-    bits = [str((n >> y) & 1) for y in range(count-1, -1, -1)]
+    bits: [str] = [str((n >> y) & 1) for y in range(count-1, -1, -1)]
     if reverse:
         bits.reverse()
     return "".join(bits)
+
 
 if __name__ == '__main__':
     import doctest,sys
